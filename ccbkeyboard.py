@@ -2,6 +2,7 @@ class Ccbkeyboard:
     def __init__(self,w,h):
         self.w = w
         self.h = h
+        self.setdisplay()
     def setdisplay(self):
         if self.h == 1544:
             self.num_line = 1186
