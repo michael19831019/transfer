@@ -39,10 +39,10 @@ class Adbcmd:
         os.popen(cmd)
         return False
     def touch_xml(self,deviceid):
-        os.system("adb -s "+deviceid+" shell rm /sdcard/window_dump.xml")
+        os.system("adb -s "+deviceid+" shell rm /sdcard/window_dump_"+deviceid+".xml")
         os.system("sudo adb -s "+deviceid+" shell uiautomator dump")
         while True:
-            result = os.system("adb -s "+deviceid+" pull /sdcard/window_dump.xml")
+            result = os.system("adb -s "+deviceid+" pull /sdcard/window_dump_"+deviceid+".xml")
             if result ==0:
                 break
             os.system("sudo adb -s "+deviceid+" shell uiautomator dump")

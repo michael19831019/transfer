@@ -5,8 +5,8 @@ import xml.dom.minidom
 from ccbkeyboard import Ccbkeyboard
 from adbcmd import Adbcmd
 
-def ccb_parse_xml(resource,text_button,index=0):
-    DOMTree = xml.dom.minidom.parse("window_dump.xml")
+def ccb_parse_xml(deviceid,resource,text_button,index=0):
+    DOMTree = xml.dom.minidom.parse("window_dump_"+deviceid+".xml")
     nodes = DOMTree.getElementsByTagName("node")
     for n in nodes:
         if index == 0:
