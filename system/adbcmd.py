@@ -45,7 +45,7 @@ class Adbcmd:
             result = os.system("adb -s "+deviceid+" pull /sdcard/window_dump_"+deviceid+".xml")
             if result ==0:
                 break
-            os.system("sudo adb -s "+deviceid+" shell uiautomator dump")
+            os.system("sudo adb -s "+deviceid+" shell uiautomator dump /sdcard/window_dump_"+deviceid+".xml")
     def tap_pos(self,deviceid,x,y):
         os.system("adb -s "+deviceid+" shell input tap "+str(x)+" "+str(y))
         
