@@ -3,8 +3,10 @@ import time
 from xml.dom.minidom import parse
 import xml.dom.minidom
 import importlib
-
+sn = ""
 result = {"bank":"CCB","deviceid":"8HT4DEQODUAQNFMJ","password":"861690"}
+
+
 bank = result['bank']
 module = importlib.import_module(bank+"."+bank)
 adb_obj_class = getattr(module,bank)

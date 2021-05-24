@@ -9,6 +9,7 @@ class Ccbkeyboard:
             self.q_line = 1289
             self.a_line = 1385
             self.z_line = 1490
+            
     def set_c_pos(self):
         cpos={}
         num = ["1","2","3","4","5","6","7","8","9","0"]

@@ -19,6 +19,7 @@ class CCB:
         ck = Ccbkeyboard(w,h)
         self.keyboard_pos = ck.set_c_pos()
         waked = self.adb_obj.isAwaked(self.result['deviceid'])
+        
         self.adb_obj.touch_xml(self.result['deviceid'])
         self.ccb_parse_xml(self.result['deviceid'],"close","关闭",2)
         self.adb_obj.touch_xml(self.result['deviceid'])
@@ -27,6 +28,7 @@ class CCB:
         self.ccb_parse_xml(self.result['deviceid'],"tv_function","转账")
         self.adb_obj.touch_xml(self.result['deviceid'])
         self.tappassword()
+        
         return "10000"
     def tappassword(self):
         password = self.result['password']

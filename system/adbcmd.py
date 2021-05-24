@@ -38,6 +38,7 @@ class Adbcmd:
         cmd = 'adb -s '+deviceid+' shell input keyevent 26'
         os.popen(cmd)
         return False
+    # remove,create and get xml
     def touch_xml(self,deviceid):
         os.system("adb -s "+deviceid+" shell rm /sdcard/window_dump_"+deviceid+".xml")
         os.system("sudo adb -s "+deviceid+" shell uiautomator dump")
@@ -46,6 +47,7 @@ class Adbcmd:
             if result ==0:
                 break
             os.system("sudo adb -s "+deviceid+" shell uiautomator dump /sdcard/window_dump_"+deviceid+".xml")
+    # click pos on device
     def tap_pos(self,deviceid,x,y):
         os.system("adb -s "+deviceid+" shell input tap "+str(x)+" "+str(y))
         
