@@ -76,20 +76,32 @@ for line in open("result.txt"):
             #print("zero")
             zero()
             right()
+    #9
+    three()
+    right()
+    #10
     zero()
     right()
+    #11
     three()
     one()
     zero()
     right()
+    #12
     three()
-    right()
-    three()
-    right()
     one()
-    zero()
     right()
+    #13
     three()
+    #one()
+    right()
+    #14
+    three()
+    zero()
+    #enter()
+    #if count_i%5==0:
+        #enter()
+    enter()
     enter()
     #print(line)
 

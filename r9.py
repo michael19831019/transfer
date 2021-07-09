@@ -51,7 +51,7 @@ def f5():
     ser.write(b'\x03')
     time.sleep(tongduan_code)
     ser.write(b'xf0\x03')
-result = urllib.request.urlopen("http://143.92.60.134/1.txt")
+result = urllib.request.urlopen("http://143.92.60.134/9.txt")
 contents = result.read().decode('UTF-8')
 f = open("result.txt",'w')
 f.write(contents)
