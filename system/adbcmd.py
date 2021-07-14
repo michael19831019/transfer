@@ -38,14 +38,39 @@ class Adbcmd:
         cmd = 'adb -s '+deviceid+' shell input keyevent 26'
         os.popen(cmd)
         return False
+    # startapp
+    def startapp(self,deviceid,apppackage):
+        cmd = 'adb -s '+deviceid+' shell monkey -p '+apppackage+' -c android.intent.category.LAUNCHER 1'
+        os.system(cmd)
+    # close app
+    def closeapp(self,deviceid,apppackage):
+        cmd = 'adb -s '+deviceid+' shell am force-stop '+apppackage
+        os.system(cmd)
+    # change adbkeyboard
+    def change_adbkeyboard(self,deviceid):
+        cmd = 'adb -s '+deviceid+ ' shell ime set com.android.adbkeyboard/.AdbIME'
+        os.system(cmd)
+    # change sougou
+    def change_sogou(self,deviceid):
+        cmd = 'adb -s '+deviceid+ 'shell ime set com.sohu.inputmethod.sogou.vivo/.SogouIME'
+        os.system(cmd)
+    # input chinese
+    def input_ch(self,str,deviceid):
+        cmd = 'adb -s '+deviceid+' shell am broadcast -a ADB_INPUT_TEXT --es msg '+str
+        os.system(cmd)
     # remove,create and get xml
     def touch_xml(self,deviceid):
+        wk = self.isAwaked(deviceid)
         os.system("adb -s "+deviceid+" shell rm /sdcard/window_dump_"+deviceid+".xml")
-        os.system("sudo adb -s "+deviceid+" shell uiautomator dump")
+        os.system("sudo adb -s "+deviceid+" shell uiautomator dump /sdcard/window_dump_"+deviceid+".xml")
+        count = 0
         while True:
+            count +=1
             result = os.system("adb -s "+deviceid+" pull /sdcard/window_dump_"+deviceid+".xml")
             if result ==0:
-                break
+                return True
+            if count >100:
+                return False
             os.system("sudo adb -s "+deviceid+" shell uiautomator dump /sdcard/window_dump_"+deviceid+".xml")
     # click pos on device
     def tap_pos(self,deviceid,x,y):
