@@ -39,18 +39,17 @@ def start_transfer(result):
     if tresult == "101":
         end_transfer(result)
         print("------###No device found!###------")
-        
     if tresult == "102":
+        end_transfer(result)
         url2 = "https://nb.brst.space/api/transfer/changestatus"
         print(bank_class.errmsg)
         data2 = {'username':username,'status':3,'id':result['id'],'failedreason':bank_class.errmsg}
         httpRequest(url2,data2)
-        end_transfer(result)
     if tresult == "10000":
+        end_transfer(result)
         url_success = "https://nb.brst.space/api/transfer/changestatus"
         data_success  = {'username':username,'status':2,'id':result['id'],'failedreason':'Transfer Success!'}
         httpRequest(url_success,data_success)
-        end_transfer(result)
 def onlineSet(sn):
     # deivce online set
     print("------###Transfer device  online setting start!###------")
@@ -94,9 +93,6 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
-                #test data
-                result = {"code":1,"mobile":"15383110077","bank_":"PSBC",'password':"vip17965290",'spassword':'861690','money':'20.50','cardnumber':'6217000130021964340','hm':'孟峰峰','deviceid':'8HT4DEQODUAQNFMJ'}
-                #test data
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:
