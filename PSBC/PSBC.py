@@ -64,6 +64,15 @@ class PSBC:
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
             e = self.find_element_bySource("cardTrans")
+            repeat = 0
+            while True:
+                repeat+=1
+                if repeat>10:
+                    break
+                p = self.adb_obj.touch_xml(self.result['deviceid'])
+                e = self.find_element_bySource("cardTrans")
+                if e:
+                    break
             if e:
                 self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
             else:
@@ -121,7 +130,7 @@ class PSBC:
                 time.sleep(2)
                 # keyboard appear
                 p3 =self.adb_obj.touch_xml(self.result['deviceid'])
-                if p3:   
+                if p3:
                     self.tappassword("spassword")
                 else:
                     print("p3 not found! keyboard not appear")
