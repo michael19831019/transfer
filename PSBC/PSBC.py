@@ -145,12 +145,13 @@ class PSBC:
             time.sleep(2)
             cmd = "adb -s "+self.result['deviceid']+" shell input text "+sms
             os.system(cmd)
-            e2 = self.find_element_bySource("dialogButton0")
-            self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
         # confirm transfer
+        print("press the transfer last button")
+        e2 = self.find_element_bySource("dialogButton0")
+        if e2:
+            self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
+        time.sleep(8)
         return "10000"
-        
-        time.sleep(5000)
     def tap_money(self):
         passwordChar_c = ["0","1","2","3","4","5","6","7","8","9","."]
         money = self.result['money']
