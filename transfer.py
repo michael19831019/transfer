@@ -46,6 +46,7 @@ while True:
     time.sleep(3)
     result_ = httpRequest(url,httpdata)
     result = result_['data']
+    result = {"code":1,"mobile":"15383110077","bank":"PSBC",'password':"vip17965290",'spassword':'861690','money':'20.50','cardnumber':'6217000130021964340','hm':'孟峰峰','deviceid':'8HT4DEQODUAQNFMJ'}
     print(result)
     # deivce online set
     onlineSet(sn)
@@ -61,7 +62,7 @@ while True:
         if result['code'] ==0:
             print("------###No transferorder found! Pulling order...in 3 seconds###------")
         else:
-            bank = result['bank']
+            bank = result['bank_']
             module = importlib.import_module(bank+"."+bank)
             adb_obj_class = getattr(module,bank)
             bank_class = adb_obj_class(result)
