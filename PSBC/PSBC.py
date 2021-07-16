@@ -127,9 +127,6 @@ class PSBC:
                     print("p3 not found! keyboard not appear")
                     self.errmsg="spassword not input"
                     return "102"
-            else:
-                self.errmsg = "spassword not found!"
-                return "102"
         # sms page
         p =self.adb_obj.touch_xml(self.result['deviceid'])
         e = self.find_element_byText("获取验证码")
