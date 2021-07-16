@@ -59,7 +59,7 @@ class PSBC:
             else:
                 self.errmsg = "not found login page!"
                 return "102"
-        time.sleep(15)
+        time.sleep(30)
         # tap transfer in logined page
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
