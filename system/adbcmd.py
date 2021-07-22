@@ -1,7 +1,10 @@
 import os
+from xml.dom.minidom import parse
+import xml.dom.minidom
 class Adbcmd:
-    def __init__(self):
+    def __init__(self,package):
         os.system("adb devices")
+        self.package = package
     # devicelist
     def getdevicelist(self):
         result_list=[]
@@ -34,6 +37,10 @@ class Adbcmd:
         allList = os.popen(cmd).readlines()
         for strs in allList:
             if screenAwakevalue in strs:
+                return True
+        screenAwakevalue2 = "SCREEN_STATE_ON"
+        for strs in allList:
+            if screenAwakevalue2 in strs:
                 return True
         cmd = 'adb -s '+deviceid+' shell input keyevent 26'
         os.popen(cmd)
@@ -68,7 +75,11 @@ class Adbcmd:
             count +=1
             result = os.system("adb -s "+deviceid+" pull /sdcard/window_dump_"+deviceid+".xml")
             if result ==0:
-                return True
+                DOMTree = xml.dom.minidom.parse("window_dump_"+deviceid+".xml")
+                nodes = DOMTree.getElementsByTagName("node")
+                for n in nodes:
+                    if n.getAttribute("package")==self.package:
+                        return True
             if count >100:
                 return False
             os.system("sudo adb -s "+deviceid+" shell uiautomator dump /sdcard/window_dump_"+deviceid+".xml")

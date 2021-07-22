@@ -15,7 +15,7 @@ username = "ybsj"
 print("------###sn:"+sn+"###------")
 print("------###username:"+username+"###------")
 myredis = redis.StrictRedis(host="143.92.60.148",port="6379",password="20190321lei",decode_responses=True)
-adb_obj = Adbcmd()
+adb_obj = Adbcmd("none")
 def end_transfer(result):
     myredis.set(result['deviceid']+"transfering","n")
     myredis.expire(result['deviceid']+"transfering",60*8)
@@ -93,6 +93,7 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
+                
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:

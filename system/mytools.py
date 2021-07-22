@@ -4,6 +4,7 @@ import os
 import time
 import requests
 import redis
+import json
 class Mytools:
     def cutimagecode(self,deviceid,left,top,right,bottom):
         os.system("adb -s "+deviceid+" shell rm /sdcard/"+deviceid+"code.jpg")
@@ -41,4 +42,7 @@ class Mytools:
                 break
             time.sleep(1)
         return smscode
-        
+    def test(self):
+        data={"content":"【邮储银行】验证码：043782（序号7151），您向孟峰峰尾号4340账户转账20.50元。任何人索要验证码均为诈骗，请勿泄露！","mobile":"123"}
+        result = json.loads(requests.post("http://143.92.60.134/public/api/index/getsms",json=data).text)
+        print(result)
