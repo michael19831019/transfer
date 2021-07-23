@@ -29,6 +29,11 @@ def start_transfer(result):
     print("transfering is running......")
     myredis.set(result['deviceid']+"transfering","y")
     myredis.expire(result['deviceid']+"transfering",60*15)
+    
+    #tansfering......status
+    url_transfering = "https://nb.brst.space/api/transfer/changestatus"
+    data_transfering  = {'username':username,'status':1,'id':result['id'],'failedreason':'Transfer Success!'}
+    httpRequest(url_transfering,data_transfering)
     #checking end
     bank = result['bank_']
     module = importlib.import_module(bank+"."+bank)
@@ -40,16 +45,16 @@ def start_transfer(result):
         end_transfer(result)
         print("------###No device found!###------")
     if tresult == "102":
-        end_transfer(result)
         url2 = "https://nb.brst.space/api/transfer/changestatus"
         print(bank_class.errmsg)
         data2 = {'username':username,'status':3,'id':result['id'],'failedreason':bank_class.errmsg}
         httpRequest(url2,data2)
-    if tresult == "10000":
         end_transfer(result)
+    if tresult == "10000":
         url_success = "https://nb.brst.space/api/transfer/changestatus"
         data_success  = {'username':username,'status':2,'id':result['id'],'failedreason':'Transfer Success!'}
         httpRequest(url_success,data_success)
+        end_transfer(result)
 def onlineSet(sn):
     # deivce online set
     print("------###Transfer device  online setting start!###------")
@@ -93,11 +98,11 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
-                
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:
                     _thread.start_new_thread( start_transfer, (result, ) )
+
     except Exception as e:
         print(str(e))
         

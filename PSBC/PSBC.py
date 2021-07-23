@@ -10,7 +10,7 @@ import importlib
 class PSBC:
     def __init__(self,result):
         self.result = result
-        self.adb_obj = Adbcmd()
+        self.adb_obj = Adbcmd("com.yitong.mbank.psbc")
         self.my_tool = Mytools()
         self.errmsg = "";
         self.package = "com.yitong.mbank.psbc"

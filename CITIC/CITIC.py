@@ -28,10 +28,10 @@ class CITIC:
         waked = self.adb_obj.isAwaked(self.result['deviceid'])
         print(waked)
         #close app
-        self.adb_obj.closeapp(self.result['deviceid'],'com.ecitic.bank.mobile')
+        self.adb_obj.closeapp(self.result['deviceid'],self.package)
         time.sleep(5)
         #start app
-        self.adb_obj.startapp(self.result['deviceid'],'com.ecitic.bank.mobile')
+        self.adb_obj.startapp(self.result['deviceid'],self.package)
         time.sleep(20)
         self.click_text("我的",ck,None,0,0)
         self.click_text("转账",ck,1,0,0)

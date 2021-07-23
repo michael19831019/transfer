@@ -10,9 +10,10 @@ import importlib
 class CCB:
     def __init__(self,result):
         self.result = result
-        self.adb_obj = Adbcmd()
+        self.adb_obj = Adbcmd("com.chinamworld.main")
         self.my_tool = Mytools()
         self.errmsg = "";
+        self.package = "com.chinamworld.main"
     def transfer(self):
         device_list = self.adb_obj.getdevicelist()
         if self.result['deviceid'] not in device_list:
@@ -26,10 +27,10 @@ class CCB:
         self.keyboard_pos = ck.set_c_pos()
         waked = self.adb_obj.isAwaked(self.result['deviceid'])
         #close app
-        self.adb_obj.closeapp(self.result['deviceid'],'com.chinamworld.main')
+        self.adb_obj.closeapp(self.result['deviceid'],self.package)
         time.sleep(5)
         #start app
-        self.adb_obj.startapp(self.result['deviceid'],'com.chinamworld.main')
+        self.adb_obj.startapp(self.result['deviceid'],self.package)
         time.sleep(20)
         
         # find ad1
@@ -37,8 +38,10 @@ class CCB:
             self.ccb_parse_xml(self.result['deviceid'],"close","关闭",2)
         # find ad2
         if self.adb_obj.touch_xml(self.result['deviceid']):
-            self.ccb_parse_xml(self.result['deviceid'],"close","关闭",2)
-            
+            self.ccb_parse_xml(self.result['deviceid'],"iv_close","",1)
+        # find ad3
+        if self.adb_obj.touch_xml(self.result['deviceid']):
+            self.ccb_parse_xml(self.result['deviceid'],"close","",0)
         # transfer button 1
         z = self.adb_obj.touch_xml(self.result['deviceid'])
         if z:
@@ -64,6 +67,8 @@ class CCB:
         if z:
             t = self.ccb_find_element(self.result['deviceid'],"btn_confirm","登录")
         if t:
+            self.ccb_parse_xml(self.result['deviceid'],"et_password","请输入您的登录密码")
+            time.sleep(1)
             self.tappassword()
         else:
             self.errmsg = "Login page not found!"
