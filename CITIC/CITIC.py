@@ -91,6 +91,7 @@ class CITIC:
             else:
                 print("not found! my")
     def tappassword(self):
+        time.sleep(1)
         password = self.result['password']
         for c in password:
             print(c)
