@@ -94,6 +94,7 @@ class CITIC:
         password = self.result['password']
         for c in password:
             print(c)
+            time.sleep(0.5)
             for p in self.keyboard_pos:
                 if c == p:
                     self.adb_obj.tap_pos(self.result['deviceid'],self.keyboard_pos[p][0],self.keyboard_pos[p][1])
