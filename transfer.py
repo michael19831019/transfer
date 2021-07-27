@@ -98,15 +98,14 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
-                #result = {"id":"111","code":1,"bank_":"CITIC","password":"17965290","money":"100","cardnumber":"6222020402044197158","hm":"mff","deviceid":"YST4VKSWEU5D5TSK"}
+                #result = {"id":"111","code":1,"bank_":"CITIC","password":"7965290","money":"5","cardnumber":"6222020402044197158","hm":"孟峰峰","deviceid":"YST4VKSWEU5D5TSK","mobile":"15383110077"}
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:
                     _thread.start_new_thread( start_transfer, (result, ) )
 
     except Exception as e:
-        print(str(e))
-       
+        print(str(e))   
     ###############################################
     
 

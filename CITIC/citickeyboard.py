@@ -24,14 +24,14 @@ class Citickeyboard:
         cpos={}
         num = ["1","2","3","4","5","6","7","8","9","0"]
         q = ["q","w","e","r","t","y","u","i","o","p"]
-        a = ["shift","a","s","d","f","g","h","j","k","l"]
-        z = ["z","x","c","v","b","n","m","backspace"]
+        a = ["a","s","d","f","g","h","j","k","l","xxx"]
+        z = ["shift","z","x","c","v","b","n","m",'backspace',"xxx"]
         for index in range(len(num)):
             cpos[num[index]] = [self.w/10/2+index*self.w/10,self.num_line]
             cpos[q[index]] = [self.w/10/2+index*self.w/10,self.q_line]
-            cpos[a[index]] = [self.w/10/2+index*self.w/10,self.a_line]
+            cpos[a[index]] = [self.w/10+index*self.w/10,self.a_line]
             if index <= 7:
-                cpos[z[index]] = [(index+2)*self.w/10,self.z_line]
+                cpos[z[index]] = [(index+1)*self.w/10,self.z_line]
         return cpos
     def set_n_pos(self):
         npass={}
