@@ -32,7 +32,12 @@ class PSBC:
         #start app
         self.adb_obj.startapp(self.result['deviceid'],self.package)
         time.sleep(20)
-        
+        #press ad
+        p = self.adb_obj.touch_xml(self.result['deviceid'])
+        if p:
+            t = self.find_element_bySource("com.yitong.mbank.psbc:id/iv_cross_marketing_close")
+            if t:
+                self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
         #press transfer button
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
