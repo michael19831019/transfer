@@ -14,7 +14,7 @@ class CCB:
         self.my_tool = Mytools()
         self.errmsg = "";
         self.package = "com.chinamworld.main"
-    def transfer(self):
+    def transfer(self,ft):
         device_list = self.adb_obj.getdevicelist()
         if self.result['deviceid'] not in device_list:
             return "101"
@@ -147,14 +147,19 @@ class CCB:
             time.sleep(1)
             # last step
             self.ccb_parse_xml(self.result['deviceid'],"btn_confirm","确定")
-            print("Transfer success!")
-            return "10000"
+            #print("Transfer success!")
+            #return "10000"
         z = self.adb_obj.touch_xml(self.result['deviceid'])
         if z:
             t = self.ccb_find_element(self.result['deviceid'],"ccb_title_right_btn","完成")
             if t:
                 print("Transfer success!")
-        return "10000"
+                return "10000"
+            else:
+                return "20000"
+        else:
+            return "20000"
+            
     
     
     

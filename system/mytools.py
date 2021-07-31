@@ -15,6 +15,9 @@ class Mytools:
         img2 = Image.open(deviceid+"code.jpg")
         cropped = img2.crop(left,top,right,bottom)
         cropped.save(deviceid+"imagecode.jpg")
+    def set_first_transferFlag(self,deviceid,flag):
+        myredis.set(deviceid+"isfirstTransfer",flag)
+        myredis.expire(deviceid+"isfirstTransfer",60)
         
     def base64_api(self,img,deviceid):
         with open(img,'rb') as f:

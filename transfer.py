@@ -35,11 +35,17 @@ def start_transfer(result):
     data_transfering  = {'username':username,'status':1,'id':result['id'],'failedreason':'Transfer Success!'}
     httpRequest(url_transfering,data_transfering)
     #checking end
+    #check isfirstTransfer
+    firstTransfer = myredis.get(result['deviceid']+"isfirstTransfer")
+    if firstTransfer !="no":
+        ft = True
+    else:
+        ft = False
     bank = result['bank_']
     module = importlib.import_module(bank+"."+bank)
     adb_obj_class = getattr(module,bank)
     bank_class = adb_obj_class(result)
-    tresult = bank_class.transfer()
+    tresult = bank_class.transfer(ft)
     
     if tresult == "101":
         end_transfer(result)
@@ -53,6 +59,11 @@ def start_transfer(result):
     if tresult == "10000":
         url_success = "https://nb.brst.space/api/transfer/changestatus"
         data_success  = {'username':username,'status':2,'id':result['id'],'failedreason':'Transfer Success!'}
+        httpRequest(url_success,data_success)
+        end_transfer(result)
+    if tresult == "20000":
+        url_success = "https://nb.brst.space/api/transfer/changestatus"
+        data_success  = {'username':username,'status':8,'id':result['id'],'failedreason':'未知'}
         httpRequest(url_success,data_success)
         end_transfer(result)
 def onlineSet(sn):
@@ -98,7 +109,7 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
-                #result = {"id":"111","code":1,"bank_":"PSBC","password":"vip7965290","money":"5","cardnumber":"6222020402044197158","hm":"孟峰峰","deviceid":"8HT4DEQODUAQNFMJ","mobile":"15383110077"}
+                #result = {"id":"111","code":1,"bank_":"PSBC","password":"17965290","money":"5","cardnumber":"6222020402044197158","hm":"孟峰峰","deviceid":"8HT4DEQODUAQNFMJ","mobile":"15383110077"}
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:

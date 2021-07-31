@@ -6,6 +6,8 @@ from CITIC.citickeyboard import Citickeyboard
 from system.adbcmd import Adbcmd
 from system.mytools import Mytools
 import importlib
+import redis
+import json
 class CITIC:
     def __init__(self,result):
         self.result = result
@@ -13,7 +15,20 @@ class CITIC:
         self.my_tool = Mytools()
         self.errmsg = "";
         self.package = "com.ecitic.bank.mobile";
-    def transfer(self):
+    def login(self,ck):
+            #close app
+            self.adb_obj.closeapp(self.result['deviceid'],self.package)
+            time.sleep(5)
+            #start app
+            self.adb_obj.startapp(self.result['deviceid'],self.package)
+            time.sleep(20)
+            self.click_text("我的",ck,None,0,0)
+            self.click_text("转账",ck,1,0,0)
+            self.click_text("请输入密码",ck,1,0,0)
+            self.tappassword()
+            self.click_text("登录",ck,1,0,0)
+    def transfer(self,ft):
+        
         device_list = self.adb_obj.getdevicelist()
         if self.result['deviceid'] not in device_list:
             return "101"
@@ -27,17 +42,12 @@ class CITIC:
         self.keyboard_npos = ck.set_n_pos()
         waked = self.adb_obj.isAwaked(self.result['deviceid'])
         print(waked)
-        #close app
-        self.adb_obj.closeapp(self.result['deviceid'],self.package)
-        time.sleep(5)
-        #start app
-        self.adb_obj.startapp(self.result['deviceid'],self.package)
-        time.sleep(20)
-        self.click_text("我的",ck,None,0,0)
-        self.click_text("转账",ck,1,0,0)
-        self.click_text("请输入密码",ck,1,0,0)
-        self.tappassword()
-        self.click_text("登录",ck,1,0,0)
+        if ft is True:
+            self.login(ck)
+        else:
+            tc = self.click_text("继续转账",ck,1,0,0)
+            if tc is False:
+                self.login(ck)
         time.sleep(10)
         self.click_text("银行卡转账",ck,1,0,0)
         time.sleep(10)
@@ -77,7 +87,20 @@ class CITIC:
                     break
             
         self.click_text("确定",ck,1,0,0)
-        return "10000"
+        p = self.adb_obj.touch_xml(self.result['deviceid'])
+        t = self.find_element_byText("交易成功")
+        if t:
+            try:
+                self.my_tool.set_first_transferFlag(self.result['deviceid'],"no")
+            except:
+                pass
+            return "10000"
+        else:
+            try:
+                self.my_tool.set_first_transferFlag(self.result['deviceid'],"yes")
+            except:
+                pass
+            return "20000"
     def click_text(self,text,ck,bounds,m_x,m_y):
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
@@ -88,8 +111,12 @@ class CITIC:
                 else:
                     self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x+m_x,self.click_pos_y+m_y)
                 print("clicked!")
+                return True
             else:
                 print("not found! my")
+                return False
+        else:
+            return False
     def tappassword(self):
         time.sleep(1)
         password = self.result['password']

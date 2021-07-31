@@ -6,7 +6,8 @@ from system.adbcmd import Adbcmd
 from system.mytools import Mytools
 from PSBC.psbckeyboard import Psbckeyboard
 import importlib
-
+import redis
+import json
 class PSBC:
     def __init__(self,result):
         self.result = result
@@ -14,24 +15,19 @@ class PSBC:
         self.my_tool = Mytools()
         self.errmsg = "";
         self.package = "com.yitong.mbank.psbc"
-    def transfer(self):
-        device_list = self.adb_obj.getdevicelist()
-        if self.result['deviceid'] not in device_list:
-            return "101"
-        w = self.adb_obj.getW(self.result['deviceid'])
-        h = self.adb_obj.getH(self.result['deviceid'])
-        ck = Psbckeyboard(w,h)
-        if ck.device_support is False:
-            self.errmsg = "Not support mobile!"
-            return "102"
-        # wakeup screen
-        waked = self.adb_obj.isAwaked(self.result['deviceid'])
+    def login(self,ck):
         #close app
         self.adb_obj.closeapp(self.result['deviceid'],self.package)
         time.sleep(5)
         #start app
         self.adb_obj.startapp(self.result['deviceid'],self.package)
         time.sleep(20)
+        #press not update
+        p = self.adb_obj.touch_xml(self.result['deviceid'])
+        if p:
+            t = self.find_element_byText("暂不更新")
+            if t:
+                self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
         #press ad
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
@@ -61,10 +57,37 @@ class PSBC:
             e = self.find_element_bySource("com.yitong.mbank.psbc:id/btnLogin")
             if e:
                 self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
+                #您的手机号或登录密码输入错误，请认真核对后重新输入。如您未注册过手机银行，请先注册。
             else:
                 self.errmsg = "not found login page!"
                 return "102"
-        time.sleep(30)
+    def transfer(self,ft):
+        device_list = self.adb_obj.getdevicelist()
+        if self.result['deviceid'] not in device_list:
+            return "101"
+        w = self.adb_obj.getW(self.result['deviceid'])
+        h = self.adb_obj.getH(self.result['deviceid'])
+        ck = Psbckeyboard(w,h)
+        if ck.device_support is False:
+            self.errmsg = "Not support mobile!"
+            return "102"
+        # wakeup screen
+        waked = self.adb_obj.isAwaked(self.result['deviceid'])
+        if ft is True:
+            self.login(ck)
+        else:
+            p =self.adb_obj.touch_xml(self.result['deviceid'])
+            tc = self.find_element_byText("继续转账")
+            if tc is False:
+                p =self.adb_obj.touch_xml(self.result['deviceid'])
+                tc2 = self.find_element_byText("继续转账")
+            else:
+                tc2 = True
+            if tc2 is False:
+                self.login(ck)
+            else:
+                self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
+        time.sleep(20)
         # tap transfer in logined page
         p = self.adb_obj.touch_xml(self.result['deviceid'])
         if p:
@@ -162,7 +185,25 @@ class PSBC:
         if e2:
             self.adb_obj.tap_pos(self.result['deviceid'],self.click_pos_x,self.click_pos_y)
         time.sleep(8)
-        return "10000"
+        p =self.adb_obj.touch_xml(self.result['deviceid'])
+        e = self.find_element_byText("转账成功")
+        if e is False:
+            p =self.adb_obj.touch_xml(self.result['deviceid'])
+            e2 = self.find_element_byText("转账成功")
+        else:
+            e2 = True
+        if e2:
+            try:
+                self.my_tool.set_first_transferFlag(self.result['deviceid'],"no")
+            except:
+                pass
+            return "10000"
+        else:
+            try:
+                self.my_tool.set_first_transferFlag(self.result['deviceid'],"yes")
+            except:
+                pass
+            return "20000"
     def tap_money(self):
         passwordChar_c = ["0","1","2","3","4","5","6","7","8","9","."]
         money = self.result['money']
