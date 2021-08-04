@@ -88,7 +88,7 @@ class CITIC:
             
         self.click_text("确定",ck,1,0,0)
         p = self.adb_obj.touch_xml(self.result['deviceid'])
-        t = self.find_element_byText("交易成功")
+        t = self.find_element_byText("继续转账")
         if t:
             try:
                 self.my_tool.set_first_transferFlag(self.result['deviceid'],"no")
