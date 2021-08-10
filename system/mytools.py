@@ -16,6 +16,7 @@ class Mytools:
         cropped = img2.crop(left,top,right,bottom)
         cropped.save(deviceid+"imagecode.jpg")
     def set_first_transferFlag(self,deviceid,flag):
+        myredis = redis.StrictRedis(host="143.92.60.148",port="6379",password="20190321lei",decode_responses=True)
         myredis.set(deviceid+"isfirstTransfer",flag)
         myredis.expire(deviceid+"isfirstTransfer",60)
         
@@ -41,7 +42,7 @@ class Mytools:
             smscode = myredis.get(mobile+"sms")
             if smscode is not None:
                 myredis.set(mobile+"sms","")
-                myredis.expire(mobile+"sms",60)
+                myredis.expire(mobile+"sms",6)
                 break
             time.sleep(1)
         return smscode

@@ -1,6 +1,7 @@
 import os
 from xml.dom.minidom import parse
 import xml.dom.minidom
+import time
 class Adbcmd:
     def __init__(self,package):
         os.system("adb devices")
@@ -45,6 +46,15 @@ class Adbcmd:
         cmd = 'adb -s '+deviceid+' shell input keyevent 26'
         os.popen(cmd)
         return False
+    # restartsmsapp
+    def restartsms(self,deviceid,apppackage):
+        self.closeapp(deviceid,"site.qifen.ucpaysms")
+        time.sleep(2)
+        #start smsapp
+        self.startapp(deviceid,"site.qifen.ucpaysms")
+        time.sleep(3)
+        self.startapp(deviceid,apppackage)
+        time.sleep(2)
     # startapp
     def startapp(self,deviceid,apppackage):
         cmd = 'adb -s '+deviceid+' shell monkey -p '+apppackage+' -c android.intent.category.LAUNCHER 1'

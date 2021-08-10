@@ -25,6 +25,7 @@ def start_transfer(result):
     transfering = myredis.get(result['deviceid']+"transfering")
     if transfering == "y":
         print("mobile is running!")
+        #myredis.set(result['deviceid']+"transfering","n")
         return
     print("transfering is running......")
     myredis.set(result['deviceid']+"transfering","y")
@@ -38,8 +39,10 @@ def start_transfer(result):
     #check isfirstTransfer
     firstTransfer = myredis.get(result['deviceid']+"isfirstTransfer")
     if firstTransfer !="no":
+        print("ft is True,fristTransfer is not no")
         ft = True
     else:
+        print("ft is false,firstTransfer is no")
         ft = False
     bank = result['bank_']
     module = importlib.import_module(bank+"."+bank)
@@ -109,7 +112,9 @@ while True:
                 httpdata= {'username':username,'tsn':name}
                 result_ = httpRequest(url,httpdata)
                 result = result_['data']
-                #result = {"id":"111","code":1,"bank_":"PSBC","password":"17965290","money":"5","cardnumber":"6222020402044197158","hm":"孟峰峰","deviceid":"8HT4DEQODUAQNFMJ","mobile":"15383110077"}
+                
+                #result = {"id":"111","code":1,"bank_":"CITIC","password":"vip17965290","money":"2","cardnumber":"6222020402044197158","hm":"孟峰峰","deviceid":"YST4VKSWEU5D5TSK","mobile":"15383110077"}
+                
                 if result['code'] ==0:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:
