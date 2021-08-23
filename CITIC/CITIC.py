@@ -25,8 +25,11 @@ class CITIC:
             time.sleep(20)
             self.click_text("我的",ck,None,0,0)
             self.click_text("转账",ck,1,0,0)
+            time.sleep(10)
             self.click_text("请输入密码",ck,1,0,0)
+            time.sleep(10)
             self.tappassword()
+            time.sleep(10)
             self.click_text("登录",ck,1,0,0)
     def transfer(self,ft):
         device_list = self.adb_obj.getdevicelist()
