@@ -12,14 +12,22 @@ import base64
 import _thread
 sn = "BRST0003"
 username = "ybsj"
+global runninglist
+runninglist = []
 print("------###sn:"+sn+"###------")
 print("------###username:"+username+"###------")
 myredis = redis.StrictRedis(host="143.92.60.148",port="6379",password="20190321lei",decode_responses=True)
 adb_obj = Adbcmd("none")
 def end_transfer(result):
-    myredis.set(result['deviceid']+"transfering","n")
-    myredis.expire(result['deviceid']+"transfering",60*8)
+    global runninglist
+    try:
+        myredis.set(result['deviceid']+"transfering","n")
+        myredis.expire(result['deviceid']+"transfering",60*8)
+        runninglist.remove(result['deviceid'])
+    except:
+        pass
 def start_transfer(result):
+    global runninglist
     print("thread start",result)
     # check and setting mobile is busying
     transfering = myredis.get(result['deviceid']+"transfering")
@@ -27,6 +35,12 @@ def start_transfer(result):
         print("mobile is running!")
         #myredis.set(result['deviceid']+"transfering","n")
         return
+    try:
+        if result['deviceid'] in runninglist:
+            print("runninglist has ",result['deviceid'])
+            return
+    except:
+        pass
     print("transfering is running......")
     myredis.set(result['deviceid']+"transfering","y")
     myredis.expire(result['deviceid']+"transfering",60*15)
@@ -94,6 +108,7 @@ def httpRequest(url,data):
     print("------###Network requesting End!###------")
     return result_
 url = "https://nb.brst.space/api/transfer/transferorder"
+
 while True:
     time.sleep(5)
     try:
@@ -119,7 +134,7 @@ while True:
                     print("------###No transferorder found! Pulling order...in 3 seconds###------")
                 else:
                     _thread.start_new_thread( start_transfer, (result, ) )
-
+                    runninglist.append(result['deivceid'])
     except Exception as e:
         print(str(e))
     ###############################################
