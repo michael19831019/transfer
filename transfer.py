@@ -10,6 +10,8 @@ import requests
 from PIL import Image
 import base64
 import _thread
+#oauth2
+#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
 sn = "BRST0003"
 username = "ybsj"
 global runninglist
